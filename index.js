@@ -1,6 +1,6 @@
 // Require modules
 const mysql = require("mysql");
-const menu = require("./prompts")
+const menu = require("./assets/js/prompts")
 
 // Create connection variable for mysql connection info
 const connection = mysql.createConnection({
@@ -20,7 +20,7 @@ const connection = mysql.createConnection({
 // Connect to mysql
 connection.connect((err) => {
   if (err) throw err;
-  console.log("Welcome to the Employee Tracker Database!");
-  menu.primaryMenu(connection);
+  console.log("\nWelcome to the Employee Tracker Database!\n");
+  menu.initPrompts(connection);
 });
 
