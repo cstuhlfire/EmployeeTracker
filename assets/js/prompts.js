@@ -1,15 +1,18 @@
+// Required 
 const inquirer = require("inquirer");
+const views = require("./viewQueries");
+//const tbl = require("console.table");
+
 let sqlConnection; 
 
-// Set sqlConnection and call primaryMenu
+// Set sqlConnection and call mainMenu
 function initPrompts(connection){
     sqlConnection = connection;
-    primaryMenu();
+    mainMenu();
 }
 
 // Prompt users with primary menu
-function primaryMenu(){
-
+function mainMenu(){
     inquirer.prompt({
         name: "action",
         type: "list",
@@ -22,13 +25,14 @@ function primaryMenu(){
             "Exit",
         ],
     })
-    .then((response) => secondaryMenu(response));
+    .then((response) => menuChoice(response));
 }
 
-function secondaryMenu(response){
+// Call view function based on menu response
+function menuChoice(response){
     switch (response.action) {
         case "View":
-          viewMenu();
+          views.viewMenu(sqlConnection, mainMenu);
           break;
 
         case "Add":
@@ -48,32 +52,9 @@ function secondaryMenu(response){
           process.exit();
 
         default:
-          console.log(`Invalid action: ${answer.action}`);
+          console.log(`Invalid action: ${response.action}`);
           break;
       }
-}
-
-function viewMenu(){
-    console.log(`\n`);
-    inquirer.prompt({
-        name: "viewType",
-        type: "list",
-        message: "Choose the data to view:",
-        choices: [
-            "View Departments",
-            "View Roles",
-            "View Employees",
-            "View Employees by Manager",
-            "View Total Utilized Budget by Department",
-            "Main Menu",
-        ],
-    })
-    .then((response) => viewActions(response));
-}
-
-function viewActions(response){
-    console.log("\nView the Things");
-    primaryMenu();
 }
 
 function addMenu(){
@@ -94,7 +75,7 @@ function addMenu(){
 
 function addActions(response){
     console.log("\nAdd the Things");
-    primaryMenu();
+    mainMenu();
 }
 
 function updateMenu(){
@@ -114,7 +95,7 @@ function updateMenu(){
 
 function updateActions(response){
     console.log("\nUpdate the Things");
-    primaryMenu();
+    mainMenu();
 }
 
 function deleteMenu(){
@@ -135,7 +116,7 @@ function deleteMenu(){
 
 function deleteActions(response){
     console.log("\nDelete the Things");
-    primaryMenu();
+    mainMenu();
 }
 
 module.exports = {initPrompts};
