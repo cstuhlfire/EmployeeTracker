@@ -1,6 +1,7 @@
-// Required 
+// Required modules
 const inquirer = require("inquirer");
 const views = require("./viewQueries");
+const adds = require("./addQueries");
 //const tbl = require("console.table");
 
 let sqlConnection; 
@@ -36,7 +37,7 @@ function menuChoice(response){
           break;
 
         case "Add":
-          addMenu();
+          adds.addMenu(sqlConnection, mainMenu);
           break;
 
         case "Update":
@@ -55,27 +56,6 @@ function menuChoice(response){
           console.log(`Invalid action: ${response.action}`);
           break;
       }
-}
-
-function addMenu(){
-    console.log(`\n`);
-    inquirer.prompt({
-        name: "addType",
-        type: "list",
-        message: "Choose the data to add:",
-        choices: [
-            "Add Departments",
-            "Add Roles",
-            "Add Employees",
-            "Main Menu",
-        ],
-    })
-    .then((response) => addActions(response));
-}
-
-function addActions(response){
-    console.log("\nAdd the Things");
-    mainMenu();
 }
 
 function updateMenu(){
