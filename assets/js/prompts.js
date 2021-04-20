@@ -3,6 +3,7 @@ const inquirer = require("inquirer");
 const views = require("./viewQueries");
 const adds = require("./addQueries");
 const updates = require("./updateQueries");
+const deletes = require("./deleteQueries");
 //const tbl = require("console.table");
 
 let sqlConnection; 
@@ -46,7 +47,7 @@ function menuChoice(response){
           break;
 
         case "Delete":
-          deleteMenu();
+          deletes.deleteMenu(sqlConnection, mainMenu);
           break;
 
         case "Exit":
@@ -57,27 +58,6 @@ function menuChoice(response){
           console.log(`Invalid action: ${response.action}`);
           break;
       }
-}
-
-function deleteMenu(){
-    console.log(`\n`);
-    inquirer.prompt({
-        name: "deleteType",
-        type: "list",
-        message: "Choose the data to delete:",
-        choices: [
-            "Delete Departments",
-            "Delete Roles",
-            "Delete Employees",
-            "Main Menu",
-        ],
-    })
-    .then((response) => deleteActions(response));
-}
-
-function deleteActions(response){
-    console.log("\nDelete the Things");
-    mainMenu();
 }
 
 module.exports = {initPrompts};
