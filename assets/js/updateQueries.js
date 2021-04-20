@@ -12,7 +12,7 @@ function updateMenu(sqlConnection, mainMenu){
         message: "Choose the data to update:",
         choices: [
             "Update Employee Role",
-            "Update Emmployee Manager",
+            "Update Employee Manager",
             "Update Employee First Name",
             "Update Employee Last Name",
             "Main Menu",
@@ -69,7 +69,34 @@ function updateEmployeeRole(response, sqlConnection, mainMenu){
     runQuery(query, valuesArr, sqlConnection, mainMenu, views.viewEmployees);
 }
 
-// Prompt for department to add
+// Build insert query to add employee to employees table
+function updateEmployeeManager(response, sqlConnection, mainMenu){
+    let valuesArr = [response.managerId, response.employeeId];
+    let query = "UPDATE employees SET manager_id = ? WHERE id = ?";
+
+    // run query with valuesArr and viewEmployees function
+    runQuery(query, valuesArr, sqlConnection, mainMenu, views.viewEmployees);
+}
+
+// Build insert query to add employee to employees table
+function updateEmployeeFirst(response, sqlConnection, mainMenu){
+    let valuesArr = [response.firstName, response.employeeId];
+    let query = "UPDATE employees SET first_name = ? WHERE id = ?";
+
+    // run query with valuesArr and viewEmployees function
+    runQuery(query, valuesArr, sqlConnection, mainMenu, views.viewEmployees);
+}
+
+// Build insert query to add employee to employees table
+function updateEmployeeLast(response, sqlConnection, mainMenu){
+    let valuesArr = [response.lastName, response.employeeId];
+    let query = "UPDATE employees SET last_name = ? WHERE id = ?";
+
+    // run query with valuesArr and viewEmployees function
+    runQuery(query, valuesArr, sqlConnection, mainMenu, views.viewEmployees);
+}
+
+// Prompt for employee and role to update
 function promptUpdateRole(sqlConnection, mainMenu){
     let employees = [];
     let roles = [];
@@ -91,7 +118,7 @@ function promptUpdateRole(sqlConnection, mainMenu){
             roles = resRoles;
             console.log(roles);
 
-            // Prompt for new employee details
+            // Prompt for employee and role to update
             inquirer.prompt([
                {
                     name: "employeeId",
@@ -112,115 +139,99 @@ function promptUpdateRole(sqlConnection, mainMenu){
     });
 }
 
-// Build query to insert new department
-// function updateRole(response, sqlConnection, mainMenu){
-//     let valuesArr = [[response.newDepartment]];
-//     let query = "INSERT INTO departments (name) VALUES ?";
-
-//     // run insert query with valuesArr and viewDepatments function
-//     runQuery(query, valuesArr, sqlConnection, mainMenu, views.viewDepartments);
-// }
-
-// // Prompt for new role to add
-// function promptNewRole(sqlConnection, mainMenu){
-//     let departments = [];
-//     let query = "SELECT * FROM departments;";
+// Prompt for employee and manager to update
+function promptUpdateManager(sqlConnection, mainMenu){
+    let employees = [];
+    let managers = [];
  
-//     // Select departments so user can pick department to assign to role
-//     sqlConnection.query(query, (err, res) => {
-//         if (err) throw err;
-
-//         departments = res;
-
-//         inquirer.prompt([
-//             {
-//                 name: "newRole",
-//                 type: "input",
-//                 message: "Enter the name of the new role: ",
-//             },
-//             {
-//                 name: "newSalary",
-//                 type: "input",
-//                 message: "Enter the salary of the new role: ",
-//             },
-//             {
-//                 name: "departmentId",
-//                 type: "list",
-//                 message: "Choose a department for the new role:",
-//                 choices: departments.map(department => ({value: department.id, name: department.name})),
-//                 }
-//         ])
-//         .then((response) => addRole(response, sqlConnection, mainMenu));
-//     });
-// }
-
-// // Build insert query to add role
-// function addRole(response, sqlConnection, mainMenu){
-//     let valuesArr = [[response.newRole, response.newSalary, response.departmentId]];
-//     let query = "INSERT INTO roles (title, salary, department_id) VALUES ?";
-
-//     // run query with valuesArr and viewRoles function
-//     runQuery(query, valuesArr, sqlConnection, mainMenu, views.viewRoles);
-// }
-
-// // Prompt for employee data to add
-// function promptNewEmployee(sqlConnection, mainMenu){
-//     let roles = [];
-//     let employees = [];
-
-//     // Create queries so users can select roles and managers (employees) to assign to the new employee
-//     let queryRoles = "SELECT * FROM roles;";
-//     let queryManagers = "SELECT * FROM employees";
+    // Create queries so users can select employees to update and managers to assign
+    let queryEmps = "SELECT * FROM employees";
  
-//     // Select roles
-//     sqlConnection.query(queryRoles, (err, resRoles) => {
-//         if (err) throw err;
+    // Select employees
+    sqlConnection.query(queryEmps, (err, resEmps) => {
+        if (err) throw err;
 
-//         roles = resRoles;
+        employees = resEmps;
+        managers = resEmps;
 
-//         // Select managers (employees)
-//         sqlConnection.query(queryManagers, (err, resManager) => {
-//         if (err) throw err;
+        // Prompt for employee and manager to update
+        inquirer.prompt([
+            {
+                name: "employeeId",
+                type: "list",
+                message: "Choose an employee to update:",
+                choices: employees.map(employee => ({value: employee.id, name: employee.first_name+" "+employee.last_name})),
+            },
+            {
+                name: "managerId",
+                type: "list",
+                message: "Choose a manager to assign to the employee:",
+                choices: managers.map(manager => ({value: manager.id, name: manager.first_name+" "+manager.last_name})),
+            }
 
-//         employees = resManager;
+        ])
+        .then((response) => updateEmployeeManager(response, sqlConnection, mainMenu));
+    });
+}
 
-//             // Prompt for new employee details
-//             inquirer.prompt([
-//                 {
-//                     name: "newFirstName",
-//                     type: "input",
-//                     message: "Enter the first name of the new employee: ",
-//                 },
-//                 {
-//                     name: "newLastName",
-//                     type: "input",
-//                     message: "Enter the last name of the new employee: ",
-//                 },
-//                 {
-//                     name: "roleId",
-//                     type: "list",
-//                     message: "Choose a role for the new employee:",
-//                     choices: roles.map(role => ({value: role.id, name: role.title})),
-//                 },
-//                 {
-//                     name: "managerId",
-//                     type: "list",
-//                     message: "Choose a manager for the new employee:",
-//                     choices: employees.map(employee => ({value: employee.id, name: employee.first_name+" "+employee.last_name})),
-//                 }
-//             ])
-//             .then((response) => addEmployee(response, sqlConnection, mainMenu));
-//         });
-//      });
-// }
+// Prompt for employee and manager to update
+function promptUpdateFirst(sqlConnection, mainMenu){
+    let employees = [];
+ 
+    // Create queries so users can select employees to update and managers to assign
+    let queryEmps = "SELECT * FROM employees";
+ 
+    // Select employees
+    sqlConnection.query(queryEmps, (err, resEmps) => {
+        if (err) throw err;
 
-// // Build insert query to add employee to employees table
-// function addEmployee(response, sqlConnection, mainMenu){
-//     let valuesArr = [[response.newFirstName, response.newLastName, response.roleId, response.managerId]];
-//     let query = "INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES ?";
+        employees = resEmps;
+        // Prompt for employee and manager to update
+        inquirer.prompt([
+            {
+                name: "employeeId",
+                type: "list",
+                message: "Choose an employee to update:",
+                choices: employees.map(employee => ({value: employee.id, name: employee.first_name+" "+employee.last_name})),
+            },
+            {
+                name: "firstName",
+                type: "input",
+                message: "Enter a new first name:",
+            }
+        ])
+        .then((response) => updateEmployeeFirst(response, sqlConnection, mainMenu));
+    });
+}
 
-//     // run query with valuesArr and viewEmployees function
-//     runQuery(query, valuesArr, sqlConnection, mainMenu, views.viewEmployees);
-// }
+// Prompt for employee and manager to update
+function promptUpdateLast(sqlConnection, mainMenu){
+    let employees = [];
+ 
+    // Create queries so users can select employees to update and managers to assign
+    let queryEmps = "SELECT * FROM employees";
+ 
+    // Select employees
+    sqlConnection.query(queryEmps, (err, resEmps) => {
+        if (err) throw err;
+
+        employees = resEmps;
+        // Prompt for employee and manager to update
+        inquirer.prompt([
+            {
+                name: "employeeId",
+                type: "list",
+                message: "Choose an employee to update:",
+                choices: employees.map(employee => ({value: employee.id, name: employee.first_name+" "+employee.last_name})),
+            },
+            {
+                name: "lastName",
+                type: "input",
+                message: "Enter a new last name:",
+            }
+        ])
+        .then((response) => updateEmployeeLast(response, sqlConnection, mainMenu));
+    });
+}
 
 module.exports = {updateMenu};
