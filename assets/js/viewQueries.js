@@ -77,7 +77,8 @@ function viewRoles(sqlConnection, mainMenu){
     let query = "SELECT title AS 'Role/Title', FORMAT(Salary, 0) AS Salary, departments.name AS Department ";
     query += "FROM roles ";
     query += "LEFT JOIN departments ";
-    query += "ON roles.department_id = departments.id; ";
+    query += "ON roles.department_id = departments.id ";
+    query += "ORDER BY departments.name;";
 
     selectQueryDisplay(query, sqlConnection, mainMenu);
 }
