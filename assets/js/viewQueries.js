@@ -55,7 +55,7 @@ function viewActions(response, sqlConnection, mainMenu){
 }
 
 // Query function 
-function selectQuery(query, sqlConnection, mainMenu){
+function selectQueryDisplay(query, sqlConnection, mainMenu){
     sqlConnection.query(query, (err, res) => {
         if (err) throw err;
 
@@ -69,14 +69,17 @@ function selectQuery(query, sqlConnection, mainMenu){
 function viewDepartments(sqlConnection, mainMenu){
     let query = "SELECT name AS 'Departments' FROM departments;";
 
-    selectQuery(query, sqlConnection, mainMenu);
+    selectQueryDisplay(query, sqlConnection, mainMenu);
 }
 
 // Select the roles
 function viewRoles(sqlConnection, mainMenu){
-    let query = "SELECT Title, FORMAT(Salary, 0) AS Salary FROM roles;";
+    let query = "SELECT title AS 'Role/Title', FORMAT(Salary, 0) AS Salary, departments.name AS Department ";
+    query += "FROM roles ";
+    query += "JOIN departments ";
+    query += "ON roles.department_id = departments.id; ";
 
-    selectQuery(query, sqlConnection, mainMenu);
+    selectQueryDisplay(query, sqlConnection, mainMenu);
 }
 
 // Select the employee details from employees, roles, and departments
@@ -93,7 +96,7 @@ function viewEmployees(sqlConnection, mainMenu){
     query += "JOIN departments ON roles.department_id = departments.id ";
     query += "ORDER BY employees.id;";
     
-    selectQuery(query, sqlConnection, mainMenu);
+    selectQueryDisplay(query, sqlConnection, mainMenu);
 }
 
 // Select employees by manager
@@ -110,7 +113,7 @@ function viewEmployeesByManager(sqlConnection, mainMenu){
 
         // Prompt for manager name from employees array
         inquirer.prompt({
-            name: "manager_id",
+            name: "managerId",
             type: "list",
             message: "Choose a manager to see who reports to them:",
             choices: employees.map(employee => ({value: employee.id, name: employee.first_name+" "+employee.last_name})),
@@ -126,7 +129,7 @@ function viewEmployeesByManager(sqlConnection, mainMenu){
                 query += "WHERE ?;";
 
                 //query = "SELECT first_name AS 'First Name', last_name AS 'Last Name' FROM employees WHERE ?";
-                sqlConnection.query(query, {manager_id: response.manager_id}, (err, res) => {
+                sqlConnection.query(query, {manager_id: response.managerId}, (err, res) => {
                     if (err) throw err;
             
                     // Log all results of the SELECT statement
@@ -137,13 +140,18 @@ function viewEmployeesByManager(sqlConnection, mainMenu){
     });
 }
                     
+// Build query to view sum of salaries grouped by budget
 function viewUtilizedBudget(sqlConnection, mainMenu){
     let query = "SELECT departments.name AS 'Department Name', FORMAT(SUM(roles.salary), 0) AS 'Utilized Budget' ";
     query += "FROM departments ";
     query += "JOIN roles ON roles.department_id = departments.id ";
     query += "GROUP BY departments.name;";
 
-    selectQuery(query, sqlConnection, mainMenu);
+    selectQueryDisplay(query, sqlConnection, mainMenu);
 }
 
-module.exports = {viewMenu};
+module.exports = {viewMenu,                    
+                viewDepartments,
+                viewRoles,
+                viewEmployees
+                };
