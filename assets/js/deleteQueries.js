@@ -60,8 +60,20 @@ function deleteDepartment(response, sqlConnection, mainMenu){
     let valuesArr = [response.departmentId];
     let query = "DELETE FROM departments WHERE id = ?";
 
-    // run query with valuesArr and viewEmployees function
-    runQuery(query, valuesArr, sqlConnection, mainMenu, views.viewDepartments);
+    console.log(`\n`);
+    inquirer.prompt({
+        name: "deleteConfirm",
+        type: "confirm",
+        message: `Are you sure you want to delete this department?`,
+     })
+     .then((res) => {
+         if (res.deleteConfirm) {
+            // run query with valuesArr and viewEmployees function
+            runQuery(query, valuesArr, sqlConnection, mainMenu, views.viewDepartments);
+        } else {
+            mainMenu();
+        }
+    });
 }
 
 // Build insert query to add employee to employees table
@@ -69,8 +81,20 @@ function deleteRole(response, sqlConnection, mainMenu){
     let valuesArr = [response.roleId];
     let query = "DELETE FROM roles WHERE id = ?";
 
-    // run query with valuesArr and viewEmployees function
-    runQuery(query, valuesArr, sqlConnection, mainMenu, views.viewRoles);
+    console.log(`\n`);
+    inquirer.prompt({
+        name: "deleteConfirm",
+        type: "confirm",
+        message: `Are you sure you want to delete this role?`,
+     })
+     .then((res) => {
+         if (res.deleteConfirm) {
+             // run query with valuesArr and viewEmployees function
+             runQuery(query, valuesArr, sqlConnection, mainMenu, views.viewRoles);
+        } else {
+            mainMenu();
+        }
+    });
 }
 
 // Build insert query to add employee to employees table
@@ -78,8 +102,20 @@ function deleteEmployee(response, sqlConnection, mainMenu){
     let valuesArr = [response.employeeId];
     let query = "DELETE FROM employees WHERE id = ?";
 
-    // run query with valuesArr and viewEmployees function
-    runQuery(query, valuesArr, sqlConnection, mainMenu, views.viewEmployees);
+    console.log(`\n`);
+    inquirer.prompt({
+        name: "deleteConfirm",
+        type: "confirm",
+        message: `Are you sure you want to delete this employee?`,
+     })
+     .then((res) => {
+         if (res.deleteConfirm) {
+             // run query with valuesArr and viewEmployees function
+             runQuery(query, valuesArr, sqlConnection, mainMenu, views.viewEmployees);
+        } else {
+            mainMenu();
+        }
+    });
 }
 
 // Prompt for department to delete
