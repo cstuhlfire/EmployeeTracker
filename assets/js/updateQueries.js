@@ -116,7 +116,6 @@ function promptUpdateRole(sqlConnection, mainMenu){
             if (err) throw err;
 
             roles = resRoles;
-            console.log(roles);
 
             // Prompt for employee and role to update
             inquirer.prompt([

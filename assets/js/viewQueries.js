@@ -76,7 +76,7 @@ function viewDepartments(sqlConnection, mainMenu){
 function viewRoles(sqlConnection, mainMenu){
     let query = "SELECT title AS 'Role/Title', FORMAT(Salary, 0) AS Salary, departments.name AS Department ";
     query += "FROM roles ";
-    query += "JOIN departments ";
+    query += "LEFT JOIN departments ";
     query += "ON roles.department_id = departments.id; ";
 
     selectQueryDisplay(query, sqlConnection, mainMenu);
@@ -92,8 +92,8 @@ function viewEmployees(sqlConnection, mainMenu){
     query += "CONCAT(manager.first_name,' ',manager.last_name) AS 'Manager Name' ";
     query += "FROM employees AS manager ";
     query += "RIGHT JOIN employees ON employees.manager_id = manager.id ";
-    query += "JOIN roles ON employees.role_id = roles.id ";
-    query += "JOIN departments ON roles.department_id = departments.id ";
+    query += "LEFT JOIN roles ON employees.role_id = roles.id ";
+    query += "LEFT JOIN departments ON roles.department_id = departments.id ";
     query += "ORDER BY employees.id;";
     
     selectQueryDisplay(query, sqlConnection, mainMenu);
@@ -124,8 +124,8 @@ function viewEmployeesByManager(sqlConnection, mainMenu){
                 query += "departments.name AS 'Department', ";
                 query += "FORMAT(salary, 0) AS 'Salary' ";
                 query += "FROM employees ";
-                query += "JOIN roles ON employees.role_id = roles.id ";
-                query += "JOIN departments ON roles.department_id = departments.id ";
+                query += "LEFT JOIN roles ON employees.role_id = roles.id ";
+                query += "LEFT JOIN departments ON roles.department_id = departments.id ";
                 query += "WHERE ?;";
 
                 //query = "SELECT first_name AS 'First Name', last_name AS 'Last Name' FROM employees WHERE ?";
@@ -140,11 +140,11 @@ function viewEmployeesByManager(sqlConnection, mainMenu){
     });
 }
                     
-// Build query to view sum of salaries grouped by budget
+// Build query to view sum of salaries grouped by department
 function viewUtilizedBudget(sqlConnection, mainMenu){
-    let query = "SELECT departments.name AS 'Department Name', FORMAT(SUM(roles.salary), 0) AS 'Utilized Budget' ";
+    let query = "SELECT departments.name AS 'Department Name', IFNULL(FORMAT(SUM(roles.salary), 0), 0) AS 'Utilized Budget' ";
     query += "FROM departments ";
-    query += "JOIN roles ON roles.department_id = departments.id ";
+    query += "LEFT JOIN roles ON roles.department_id = departments.id ";
     query += "GROUP BY departments.name;";
 
     selectQueryDisplay(query, sqlConnection, mainMenu);
