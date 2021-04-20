@@ -118,7 +118,6 @@ function addRole(response, sqlConnection, mainMenu){
     let valuesArr = [[response.newRole, response.newSalary, response.departmentId]];
     let query = "INSERT INTO roles (title, salary, department_id) VALUES ?";
 
-    console.log(response);
     if (response.newRole === "" || response.newSalary === ""){
         console.log("\nMissing input: Please enter a value for both role and salary");
         promptNewRole(sqlConnection, mainMenu);
