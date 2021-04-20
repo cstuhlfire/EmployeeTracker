@@ -70,8 +70,14 @@ function addDepartment(response, sqlConnection, mainMenu){
     let valuesArr = [[response.newDepartment]];
     let query = "INSERT INTO departments (name) VALUES ?";
 
-    // run insert query with valuesArr and viewDepatments function
-    runQuery(query, valuesArr, sqlConnection, mainMenu, views.viewDepartments);
+    if (response.newDepartment === "") {
+        console.log("\nMissing input: Please enter a department name.");
+        promptNewDepartment(sqlConnection, mainMenu);
+    }
+    else {
+        // run insert query with valuesArr and viewDepatments function
+        runQuery(query, valuesArr, sqlConnection, mainMenu, views.viewDepartments);
+    }
 }
 
 // Prompt for new role to add
@@ -112,8 +118,15 @@ function addRole(response, sqlConnection, mainMenu){
     let valuesArr = [[response.newRole, response.newSalary, response.departmentId]];
     let query = "INSERT INTO roles (title, salary, department_id) VALUES ?";
 
-    // run query with valuesArr and viewRoles function
-    runQuery(query, valuesArr, sqlConnection, mainMenu, views.viewRoles);
+    console.log(response);
+    if (response.newRole === "" || response.newSalary === ""){
+        console.log("\nMissing input: Please enter a value for both role and salary");
+        promptNewRole(sqlConnection, mainMenu);
+    } 
+    else{
+        // run query with valuesArr and viewRoles function
+        runQuery(query, valuesArr, sqlConnection, mainMenu, views.viewRoles);
+    }
 }
 
 // Prompt for employee data to add
@@ -172,8 +185,14 @@ function addEmployee(response, sqlConnection, mainMenu){
     let valuesArr = [[response.newFirstName, response.newLastName, response.roleId, response.managerId]];
     let query = "INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES ?";
 
-    // run query with valuesArr and viewEmployees function
-    runQuery(query, valuesArr, sqlConnection, mainMenu, views.viewEmployees);
+    if (response.newFirstName === "" || response.newLastName === "") {
+        console.log("\nMissing input: Please enter a value for both first name and last name");
+        promptNewEmployee(sqlConnection, mainMenu);
+    } 
+    else{
+        // run query with valuesArr and viewEmployees function
+        runQuery(query, valuesArr, sqlConnection, mainMenu, views.viewEmployees);
+    }
 }
 
 module.exports = {addMenu};

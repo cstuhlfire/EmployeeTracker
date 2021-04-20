@@ -83,8 +83,14 @@ function updateEmployeeFirst(response, sqlConnection, mainMenu){
     let valuesArr = [response.firstName, response.employeeId];
     let query = "UPDATE employees SET first_name = ? WHERE id = ?";
 
-    // run query with valuesArr and viewEmployees function
-    runQuery(query, valuesArr, sqlConnection, mainMenu, views.viewEmployees);
+    if (response.firstName === "") {
+        console.log("\nMissing input: Please enter a new value for first name.");
+        promptUpdateFirst(sqlConnection, mainMenu);
+    } 
+    else{
+        // run query with valuesArr and viewEmployees function
+        runQuery(query, valuesArr, sqlConnection, mainMenu, views.viewEmployees);
+    }
 }
 
 // Build insert query to add employee to employees table
@@ -92,8 +98,14 @@ function updateEmployeeLast(response, sqlConnection, mainMenu){
     let valuesArr = [response.lastName, response.employeeId];
     let query = "UPDATE employees SET last_name = ? WHERE id = ?";
 
-    // run query with valuesArr and viewEmployees function
-    runQuery(query, valuesArr, sqlConnection, mainMenu, views.viewEmployees);
+    if (response.lastName === "") {
+        console.log("\nMissing input: Please enter a value for last name.");
+        promptUpdateLast(sqlConnection, mainMenu);
+    } 
+    else{
+        // run query with valuesArr and viewEmployees function
+        runQuery(query, valuesArr, sqlConnection, mainMenu, views.viewEmployees);
+    }
 }
 
 // Prompt for employee and role to update
