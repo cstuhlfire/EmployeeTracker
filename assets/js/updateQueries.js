@@ -134,13 +134,13 @@ function promptUpdateRole(sqlConnection, mainMenu){
                {
                     name: "employeeId",
                     type: "list",
-                    message: "Choose a manager for the new employee:",
+                    message: "Choose an employee to update:",
                     choices: employees.map(employee => ({value: employee.id, name: employee.first_name+" "+employee.last_name})),
                 },
                 {
                     name: "roleId",
                     type: "list",
-                    message: "Choose a role to update the employee:",
+                    message: "Choose a role for the employee:",
                     choices: roles.map(role => ({value: role.id, name: role.title})),
                 }
  

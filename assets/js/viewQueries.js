@@ -67,7 +67,7 @@ function selectQueryDisplay(query, sqlConnection, mainMenu){
 
 // Select the departments
 function viewDepartments(sqlConnection, mainMenu){
-    let query = "SELECT name AS 'Departments' FROM departments;";
+    let query = "SELECT name AS 'Departments' FROM departments ORDER BY name;";
 
     selectQueryDisplay(query, sqlConnection, mainMenu);
 }
@@ -78,7 +78,7 @@ function viewRoles(sqlConnection, mainMenu){
     query += "FROM roles ";
     query += "LEFT JOIN departments ";
     query += "ON roles.department_id = departments.id ";
-    query += "ORDER BY departments.name;";
+    query += "ORDER BY departments.name, roles.salary DESC;";
 
     selectQueryDisplay(query, sqlConnection, mainMenu);
 }
@@ -95,7 +95,7 @@ function viewEmployees(sqlConnection, mainMenu){
     query += "RIGHT JOIN employees ON employees.manager_id = manager.id ";
     query += "LEFT JOIN roles ON employees.role_id = roles.id ";
     query += "LEFT JOIN departments ON roles.department_id = departments.id ";
-    query += "ORDER BY employees.id;";
+    query += "ORDER BY departments.name, roles.salary DESC;";
     
     selectQueryDisplay(query, sqlConnection, mainMenu);
 }
@@ -127,7 +127,7 @@ function viewEmployeesByManager(sqlConnection, mainMenu){
                 query += "FROM employees ";
                 query += "LEFT JOIN roles ON employees.role_id = roles.id ";
                 query += "LEFT JOIN departments ON roles.department_id = departments.id ";
-                query += "WHERE ?;";
+                query += "WHERE ? ORDER BY roles.salary DESC;";
 
                 //query = "SELECT first_name AS 'First Name', last_name AS 'Last Name' FROM employees WHERE ?";
                 sqlConnection.query(query, {manager_id: response.managerId}, (err, res) => {
@@ -146,7 +146,7 @@ function viewUtilizedBudget(sqlConnection, mainMenu){
     let query = "SELECT departments.name AS 'Department Name', IFNULL(FORMAT(SUM(roles.salary), 0), 0) AS 'Utilized Budget' ";
     query += "FROM departments ";
     query += "LEFT JOIN roles ON roles.department_id = departments.id ";
-    query += "GROUP BY departments.name;";
+    query += "GROUP BY departments.name ORDER BY departments.name;";
 
     selectQueryDisplay(query, sqlConnection, mainMenu);
 }
