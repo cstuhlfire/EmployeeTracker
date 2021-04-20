@@ -2,6 +2,7 @@
 const inquirer = require("inquirer");
 const views = require("./viewQueries");
 const adds = require("./addQueries");
+const updates = require("./updateQueries");
 //const tbl = require("console.table");
 
 let sqlConnection; 
@@ -41,7 +42,7 @@ function menuChoice(response){
           break;
 
         case "Update":
-          updateMenu();
+          updates.updateMenu(sqlConnection, mainMenu);
           break;
 
         case "Delete":
@@ -56,26 +57,6 @@ function menuChoice(response){
           console.log(`Invalid action: ${response.action}`);
           break;
       }
-}
-
-function updateMenu(){
-    console.log(`\n`);
-    inquirer.prompt({
-        name: "updateType",
-        type: "list",
-        message: "Choose the data to update:",
-        choices: [
-            "Update Employee Roles",
-            "Update Employee Managers",
-            "Main Menu",
-        ],
-    })
-    .then((response) => updateActions(response));
-}
-
-function updateActions(response){
-    console.log("\nUpdate the Things");
-    mainMenu();
 }
 
 function deleteMenu(){
