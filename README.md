@@ -27,10 +27,10 @@ enter "node index.js" or "npm start" on the command line. Follow the menus to ad
 delete, and view data.
 
 ## Screenshot
-![Screenshot](./assets/EmployeeTrackerScreenShot1.PNG)
+![Screenshot](./EmployeeTrackerScreenShot1.PNG)
 
 
-![Screenshot](./assets/EmployeeTrackerScreenShot2.PNG)
+![Screenshot](./EmployeeTrackerScreenShot2.PNG)
 
 
 ## Screencast
