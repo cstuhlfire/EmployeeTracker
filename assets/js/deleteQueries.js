@@ -136,7 +136,7 @@ function promptDeleteDepartment(sqlConnection, mainMenu){
             {
                 name: "departmentId",
                 type: "list",
-                message: "Choose a manager for the new employee:",
+                message: "Choose a department to delete:",
                 choices: departments.map(department => ({value: department.id, name: department.name})),
             }
         ])
